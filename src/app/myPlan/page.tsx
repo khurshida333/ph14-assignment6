@@ -54,12 +54,22 @@ export default function MyPlanPage() {
 
   const [isSorted, setIsSorted] = useState(false);
 
+  // Sort logic: Completed items automatically go to the bottom, 
+  // while non-completed items stack and sort normally above them.
   const sortedList = [...currentList].sort((a, b) => {
-    if (!isSorted) return 0; // Keeps original stacking order until sorted
-    if (sortBy === "Duration") return (b.duration || 0) - (a.duration || 0);
-    if (sortBy === "Calories")
-      return (b.caloriesBurned || 0) - (a.caloriesBurned || 0);
-    if (sortBy === "Rating") return (b.rating || 0) - (a.rating || 0);
+    const aDone = completedIds.includes(a.id);
+    const bDone = completedIds.includes(b.id);
+
+    // If 'a' is done and 'b' is not, 'a' goes down (+1)
+    if (aDone && !bDone) return 1;
+    // If 'b' is done and 'a' is not, 'b' goes down (-1)
+    if (!aDone && bDone) return -1;
+
+    // If both share the same completion status, apply your active sort or keep stacking order
+    if (sortBy === 'Duration') return (b.duration || 0) - (a.duration || 0);
+    if (sortBy === 'Calories') return (b.caloriesBurned || 0) - (b.caloriesBurned || 0); // (or keep your standard sort)
+    if (sortBy === 'Rating') return (b.rating || 0) - (a.rating || 0);
+    
     return 0;
   });
 

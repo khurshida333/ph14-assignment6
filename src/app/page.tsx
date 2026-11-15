@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import Banner from '@/app/components/homepage/Banner';
 import WorkoutLibrary from '@/app/components/homepage/WorkoutLibrary';
 

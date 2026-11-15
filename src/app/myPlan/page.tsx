@@ -1,13 +1,21 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { Clock, Flame, Star, Check, X, ChevronDown, Bookmark } from 'lucide-react';
-import { usePlan } from '@/context/PlanContext';
-import { IWorkout } from '@/types/workouts.type';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  Clock,
+  Flame,
+  Star,
+  Check,
+  X,
+  ChevronDown,
+  Bookmark,
+} from "lucide-react";
+import { usePlan } from "@/context/PlanContext";
+import { IWorkout } from "@/types/workouts.type";
 
-type SortOption = 'Duration' | 'Calories' | 'Rating';
+type SortOption = "Duration" | "Calories" | "Rating";
 
 export default function MyPlanPage() {
   const {
@@ -19,8 +27,8 @@ export default function MyPlanPage() {
     toggleMarkAsDone,
   } = usePlan();
 
-  const [activeTab, setActiveTab] = useState<'today' | 'saved'>('today');
-  const [sortBy, setSortBy] = useState<SortOption>('Duration');
+  const [activeTab, setActiveTab] = useState<"today" | "saved">("today");
+  const [sortBy, setSortBy] = useState<SortOption>("Duration");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -30,19 +38,28 @@ export default function MyPlanPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Active list based on tab
-  const currentList = activeTab === 'today' ? todayPlan : savedWorkouts;
+  // Active list based on tab (preserves insertion/stacking order)
+  const currentList = activeTab === "today" ? todayPlan : savedWorkouts;
 
   // Calculate Metrics Summary for Today's Plan
   const totalExercises = todayPlan.length;
-  const totalMinutes = todayPlan.reduce((acc, curr) => acc + (curr.duration || 0), 0);
-  const totalCalories = todayPlan.reduce((acc, curr) => acc + (curr.caloriesBurned || 0), 0);
+  const totalMinutes = todayPlan.reduce(
+    (acc, curr) => acc + (curr.duration || 0),
+    0,
+  );
+  const totalCalories = todayPlan.reduce(
+    (acc, curr) => acc + (curr.caloriesBurned || 0),
+    0,
+  );
 
-  // Sort logic
+  const [isSorted, setIsSorted] = useState(false);
+
   const sortedList = [...currentList].sort((a, b) => {
-    if (sortBy === 'Duration') return (b.duration || 0) - (a.duration || 0);
-    if (sortBy === 'Calories') return (b.caloriesBurned || 0) - (a.caloriesBurned || 0);
-    if (sortBy === 'Rating') return (b.rating || 0) - (a.rating || 0);
+    if (!isSorted) return 0; // Keeps original stacking order until sorted
+    if (sortBy === "Duration") return (b.duration || 0) - (a.duration || 0);
+    if (sortBy === "Calories")
+      return (b.caloriesBurned || 0) - (a.caloriesBurned || 0);
+    if (sortBy === "Rating") return (b.rating || 0) - (a.rating || 0);
     return 0;
   });
 
@@ -61,16 +78,28 @@ export default function MyPlanPage() {
       {/* Metrics Summary Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
         <div className="bg-[#15171c] border border-white/10 rounded-2xl p-6">
-          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Exercises</p>
-          <p className="text-3xl sm:text-4xl font-black text-[#ccff00]">{totalExercises}</p>
+          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">
+            Exercises
+          </p>
+          <p className="text-3xl sm:text-4xl font-black text-[#ccff00]">
+            {totalExercises}
+          </p>
         </div>
         <div className="bg-[#15171c] border border-white/10 rounded-2xl p-6">
-          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Minutes</p>
-          <p className="text-3xl sm:text-4xl font-black text-white">{totalMinutes}</p>
+          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">
+            Minutes
+          </p>
+          <p className="text-3xl sm:text-4xl font-black text-white">
+            {totalMinutes}
+          </p>
         </div>
         <div className="bg-[#15171c] border border-white/10 rounded-2xl p-6">
-          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">Calories</p>
-          <p className="text-3xl sm:text-4xl font-black text-white">{totalCalories}</p>
+          <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-2">
+            Calories
+          </p>
+          <p className="text-3xl sm:text-4xl font-black text-white">
+            {totalCalories}
+          </p>
         </div>
       </div>
 
@@ -79,21 +108,21 @@ export default function MyPlanPage() {
         {/* Tabs */}
         <div className="flex items-center gap-2 bg-[#15171c] border border-white/10 p-1.5 rounded-xl">
           <button
-            onClick={() => setActiveTab('today')}
+            onClick={() => setActiveTab("today")}
             className={`px-6 py-2 rounded-lg text-xs font-bold uppercase transition-all ${
-              activeTab === 'today'
-                ? 'bg-[#ccff00] text-black shadow-md'
-                : 'text-gray-300 hover:text-white'
+              activeTab === "today"
+                ? "bg-[#ccff00] text-black shadow-md"
+                : "text-gray-300 hover:text-white"
             }`}
           >
             Today&apos;s Plan
           </button>
           <button
-            onClick={() => setActiveTab('saved')}
+            onClick={() => setActiveTab("saved")}
             className={`px-6 py-2 rounded-lg text-xs font-bold uppercase transition-all ${
-              activeTab === 'saved'
-                ? 'bg-[#ccff00] text-black shadow-md'
-                : 'text-gray-300 hover:text-white'
+              activeTab === "saved"
+                ? "bg-[#ccff00] text-black shadow-md"
+                : "text-gray-300 hover:text-white"
             }`}
           >
             Saved
@@ -115,20 +144,25 @@ export default function MyPlanPage() {
 
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-full min-w-[130px] bg-[#15171c] border border-white/10 rounded-xl shadow-xl z-30 overflow-hidden py-1">
-              {(['Duration', 'Calories', 'Rating'] as SortOption[]).map((option) => (
-                <button
-                  key={option}
-                  onClick={() => {
-                    setSortBy(option);
-                    setIsDropdownOpen(false);
-                  }}
-                  className={`w-full text-left px-4 py-2.5 text-xs font-bold uppercase transition-colors ${
-                    sortBy === option ? 'bg-[#ccff00] text-black' : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                  }`}
-                >
-                  {option}
-                </button>
-              ))}
+              {(["Duration", "Calories", "Rating"] as SortOption[]).map(
+                (option) => (
+                  <button
+                    key={option}
+                    onClick={() => {
+                      setSortBy(option);
+                      setIsSorted(true); // Activates sorting when user picks an option
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-4 py-2.5 text-xs font-bold uppercase transition-colors ${
+                      sortBy === option
+                        ? "bg-[#ccff00] text-black"
+                        : "text-gray-300 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ),
+              )}
             </div>
           )}
         </div>
@@ -166,14 +200,16 @@ export default function MyPlanPage() {
               <div
                 key={workout.id}
                 className={`bg-[#15171c] border rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 transition-all ${
-                  isDone ? 'border-emerald-500/50 bg-emerald-950/10' : 'border-white/10 hover:border-white/20'
+                  isDone
+                    ? "border-emerald-500/50 bg-emerald-950/10"
+                    : "border-white/10 hover:border-white/20"
                 }`}
               >
                 {/* Left: Thumbnail & Details */}
                 <div className="flex items-center gap-5 w-full sm:w-auto">
                   <div className="relative w-24 h-20 sm:w-28 sm:h-20 bg-[#101216] rounded-xl overflow-hidden flex-shrink-0">
                     <Image
-                      src={workout.image || '/hero-workout.png'}
+                      src={workout.image || "/hero-workout.png"}
                       alt={workout.name}
                       fill
                       className="object-cover"
@@ -184,7 +220,7 @@ export default function MyPlanPage() {
                       {workout.name}
                     </h3>
                     <p className="text-gray-400 text-xs mb-3">
-                      {workout.equipment || 'Standard Equipment'}
+                      {workout.equipment || "Standard Equipment"}
                     </p>
 
                     {/* Stats Row */}
@@ -214,23 +250,23 @@ export default function MyPlanPage() {
                     View Details
                   </Link>
 
-                  {activeTab === 'today' && (
+                  {activeTab === "today" && (
                     <button
                       onClick={() => toggleMarkAsDone(workout.id)}
                       className={`px-4 py-2.5 rounded-xl text-xs font-bold uppercase transition-all flex items-center gap-2 ${
                         isDone
-                          ? 'bg-emerald-500 text-black font-extrabold'
-                          : 'bg-[#ccff00] hover:bg-[#b8e600] text-black font-extrabold'
+                          ? "bg-emerald-500 text-black font-extrabold"
+                          : "bg-[#ccff00] hover:bg-[#b8e600] text-black font-extrabold"
                       }`}
                     >
                       <Check className="w-4 h-4" />
-                      {isDone ? 'Completed' : 'Mark as Done'}
+                      {isDone ? "Completed" : "Mark as Done"}
                     </button>
                   )}
 
                   <button
                     onClick={() => {
-                      if (activeTab === 'today') {
+                      if (activeTab === "today") {
                         removeFromTodayPlan(workout.id);
                       } else {
                         removeFromSaved(workout.id);

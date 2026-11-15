@@ -1,4 +1,4 @@
-# 🏋️‍♂️ FitLog — Modern Fitness Dashboard & Workout Library
+# FitLog — Modern Fitness Dashboard & Workout Library
 
 > **Train with intent. Log every set.** 
 
@@ -6,7 +6,7 @@ FitLog is a sleek, dark-themed, no-nonsense gym companion built with modern web 
 
 ---
 
-## 🚀 Technologies Used
+## Technologies Used
 
 * **Framework:** [Next.js 15 (App Router)](https://nextjs.org/) — Server-side rendering, dynamic routing, and optimized performance.
 * **Styling:** [Tailwind CSS](https://tailwindcss.com/) & DaisyUI — Modern, responsive, utility-first UI styling.
@@ -16,27 +16,30 @@ FitLog is a sleek, dark-themed, no-nonsense gym companion built with modern web 
 
 ---
 
-## ✨ 5 Key Features
+## 5 Key Features
 
 1. **Comprehensive Workout Library & Grid:** 
    Explore a responsive 3x4 grid featuring detailed exercise cards complete with illustration thumbnails, category tags, equipment lines, and icon-based stats (duration, calories, rating).
+
 2. **Interactive Dynamic Workout Details:** 
    Deep-dive into individual lift pages featuring a two-column responsive layout, comprehensive specs tables (Equipment, Difficulty, Sets, Reps, Calories, Rating), and step-by-step ordered instructions.
+
 3. **Smart 5-Lift Daily Cap Constraint:** 
    Enforces a realistic daily workout limit (up to 5 active lifts per day) with dynamic button disabling and helpful status indicators (`"Plan Full"` / `"Already in today's plan"`).
+
 4. **Real-Time "My Plan" Dashboard & Metrics:** 
    Track your active daily schedule and saved routines with a live metrics summary row (Exercises, Minutes, and Calories) that updates instantly as items are added or removed.
+   
 5. **Advanced Sorting & Workout Tracking Controls:** 
    Sort your active workout queue dynamically by **Duration**, **Calories**, or **Rating**, mark workouts as **Completed**, and utilize custom instant toast notifications for seamless user feedback.
 
 ---
 
-## 🛠️ Getting Started Locally
+## Getting Started Locally
 
 1. Clone the repository:
    git clone [https://github.com/your-username/get-fit-today.git](https://github.com/your-username/get-fit-today.git)
    cd get-fit-today
-
 
 2. Install dependencies:
    npm install
